@@ -6,7 +6,20 @@ jobs:
       - image: weaveworks/eksctl
     steps:
       - checkout
-      - run: eksctl create cluster --name capstone-kuber-prod --region=us-east-1
+      - run:
+          name: Check EKS prod cluster and run if not running
+          command: |
+            set +e
+            eksctl get cluster --name=capstone-kuber-prod --region=us-east-1 > /tmp/cluster_status
+            if grep -q "No cluster found for name" /tmp/cluster_status; then
+              echo "Cluster not found, starting prod cluster"
+              eksctl create cluster --name capstone-kuber-prod --ssh-access --ssh-public-key=iamin --region=us-east-1
+            elif grep -q "ACTIVE" /tmp/cluster_status; then
+              echo "Cluster is running"
+            else
+              echo "Unknown cluster status"
+              exit 1
+            fi
   test:
     docker:
       - image: cimg/base:2023.03
