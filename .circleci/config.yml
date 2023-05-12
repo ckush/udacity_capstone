@@ -65,8 +65,8 @@ jobs:
           environment:
             DOCKER_HOST: tcp://localhost:2375
 
-  deploy-docker:
-    docker:
+  # deploy-docker:
+  #   docker:
 
 # Orchestrate our job run sequence
 workflows:
