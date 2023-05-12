@@ -1,0 +1,33 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJek1EVXhNakUzTVRnMU1Wb1hEVE16TURVd09URTNNVGcxTVZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTS9vCndzNE5GSUtWenhwbkptZzVMUU9hTytZM3ZzY0V4bFFkaXZScld6T2IrQVoxMTlZNHN1Y3BCdGhVeXl4M2FtZmQKOFVwblQ5Nk4zcWxaU0c1S24wZ1lBaDl4MFgvcFh2ZmVZa3hLbW1uT1dqV0ZLTFdBeXFqL3FHVVBpeUtDT0RMSgpKMUtaMkdDZEpuUjIwbW9tbTZhVVk5VXl1cXJzdis4OUQ3M2l4bWxsZ0J2VTc1ZThqSmwzV045YzhESEU5MWtaCk5PNWtmbEpWUHlPWUlHZzU5ZHcySXluS3hNcHA3bE9KdTVCWDkvZG9ocGFqK0ZyMFExemVPMWVaNDlBRkk4ai8KYzZua2JsU09FbEE2UXhBWXhwcnpDZUcyOHBNd3hiOGtQMkFPNzJKSFI0cHFPQkZoWWdPWDJBWmo4NUpkUlpVWgpNYi9QSFd1YWlvQVE5VmpxYkhVQ0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZQcU91TGp1d1d0K3phZ1FUYkxXRVFGTytXMkNNQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSXFjY3N3RkJacmVxR1czV1NzNQorYXpWLzRqMEU1SmdkZzJJTElSdGZ2NHlQc0d4d2dhK2ZEcVA5ald1WDBmQzViaitIempOQjk1YlFXUGp1YUxyCmJKb0p3SndWSGM4YlBUd0h0bzJlQ3FTME0xdGVzZ0RERzlCa2xYOTdsY2VJZkVFVXVJa1hFMGUraGE3VHA2dDgKaEY1OTllZE54WVJQenp4cytxdmJUK2hLMDZFMkZSay9qYlY0cmlhUE5PUUVUcnRGZ01OY3VJOHJkNUhTZGdESwpXOUM2TUtZNGFVRjBhdzhrczBrR3BSQjBQNzBFZGliZnY5ZHdqWWNHMDBvbEpVclJ1Mnp4WnV1SWxpUTJCMHZpCndqQ0krSkhxN1V6VkhSektZNDNuRE9nN2ljblNCRmMyQVRaYVBqSnd5STlKY0c5TDFndUl1LzJoRzdDbGdGaTAKTjdrPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    server: https://368194CFC260584B7ABA5B774E3E1541.gr7.us-east-1.eks.amazonaws.com
+  name: capstone-kuber-prod.us-east-1.eksctl.io
+contexts:
+- context:
+    cluster: capstone-kuber-prod.us-east-1.eksctl.io
+    user: gigachadadmin@capstone-kuber-prod.us-east-1.eksctl.io
+  name: gigachadadmin@capstone-kuber-prod.us-east-1.eksctl.io
+current-context: gigachadadmin@capstone-kuber-prod.us-east-1.eksctl.io
+kind: Config
+preferences: {}
+users:
+- name: gigachadadmin@capstone-kuber-prod.us-east-1.eksctl.io
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - eks
+      - get-token
+      - --output
+      - json
+      - --cluster-name
+      - capstone-kuber-prod
+      - --region
+      - us-east-1
+      command: aws
+      env:
+      - name: AWS_STS_REGIONAL_ENDPOINTS
+        value: regional
+      provideClusterInfo: false
