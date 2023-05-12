@@ -28,7 +28,7 @@ jobs:
           name: Check EKS prod cluster and run if not running
           command: |
             set +e
-            eksctl get cluster --name=capstone-kuber-prod --region=us-east-1 > /tmp/cluster_status
+            eksctl get cluster --name=capstone-kuber-prod --region=us-east-1 > /tmp/cluster_status 2>&1
             if grep -q "No cluster found for name" /tmp/cluster_status; then
               echo "Cluster not found, starting prod cluster"
               eksctl create cluster --name capstone-kuber-prod --ssh-access --ssh-public-key=iamin --region=us-east-1
@@ -49,7 +49,7 @@ jobs:
       - image: docker:20.10.7-git
     steps:
       - checkout
-      - setup_remote_docker
+      # - setup_remote_docker
       - run:
           name: Build Docker image
           command: |
@@ -75,4 +75,3 @@ workflows:
       - deploy-cluster
       - build-test
       - build-docker
-
