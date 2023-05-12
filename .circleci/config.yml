@@ -32,13 +32,15 @@ jobs:
             if grep -q "No cluster found for name" /tmp/cluster_status; then
               echo "Cluster not found, starting prod cluster"
               eksctl create cluster --name capstone-kuber-prod --ssh-access --ssh-public-key=iamin --region=us-east-1
-              eksctl utils write-kubeconfig --cluster=capstone-kuber-prod --kubeconfig=manifest.yaml
             elif grep -q "ACTIVE" /tmp/cluster_status; then
               echo "Cluster is running"
             else
               echo "Unknown cluster status"
               exit 1
             fi
+            eksctl utils write-kubeconfig --cluster=capstone-kuber-prod --kubeconfig=manifest.yaml
+            ls -lah
+            ls ~ -lah
       - persist_to_workspace:
           root: ~/
           paths:
@@ -59,7 +61,7 @@ jobs:
       - run:
           name: Push Docker image to registry
           command: |
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
             docker tag my-nginx-hello-world "$DOCKER_USERNAME/my-nginx-hello-world"
             docker push "$DOCKER_USERNAME/my-nginx-hello-world"
   # deploy-docker:
