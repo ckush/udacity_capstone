@@ -1,7 +1,25 @@
 version: 2.1
 
 jobs:
-  build:
+  build-test:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            make install
+      - run:
+          name: Lint Dockerfile
+          command: |
+            make lint-docker
+      - run:
+          name: Lint index.html
+          command: |
+            make lint-html
+
+  deploy-cluster:
     docker:
       - image: weaveworks/eksctl
     steps:
@@ -14,22 +32,47 @@ jobs:
             if grep -q "No cluster found for name" /tmp/cluster_status; then
               echo "Cluster not found, starting prod cluster"
               eksctl create cluster --name capstone-kuber-prod --ssh-access --ssh-public-key=iamin --region=us-east-1
+              eksctl utils eksctl-utils write-kubeconfig --cluster=capstone-kuber-prod --kubeconfig=manifest.yaml
             elif grep -q "ACTIVE" /tmp/cluster_status; then
               echo "Cluster is running"
             else
               echo "Unknown cluster status"
               exit 1
             fi
-  test:
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - manifest.yaml
+
+  build-docker:
     docker:
-      - image: cimg/base:2023.03
+      - image: docker:20.10.7-git
     steps:
       - checkout
-      - run: echo "this is the test job"
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t my-nginx-hello-world .
+          environment:
+            DOCKER_HOST: tcp://localhost:2375
+      - run:
+          name: Push Docker image to registry
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker tag my-nginx-hello-world "$DOCKER_USERNAME/my-nginx-hello-world"
+            docker push "$DOCKER_USERNAME/my-nginx-hello-world"
+          environment:
+            DOCKER_HOST: tcp://localhost:2375
+
+  deploy-docker:
+    docker:
 
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
     jobs:
-      - build
-      - test
+      - deploy-cluster
+      - build-test
+      - build-docker
+
