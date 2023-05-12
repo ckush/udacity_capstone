@@ -39,10 +39,10 @@ jobs:
               exit 1
             fi
             eksctl utils write-kubeconfig --cluster=capstone-kuber-prod --kubeconfig=manifest.yaml
-            ls -lah
-            ls ~ -lah
+            pwd
+            ls ~/project/ -lah
       - persist_to_workspace:
-          root: ~/
+          root: ~/project/
           paths:
             - manifest.yaml
 
