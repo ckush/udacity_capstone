@@ -64,8 +64,19 @@ jobs:
             docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
             docker tag my-nginx-hello-world "$DOCKER_USERNAME/my-nginx-hello-world"
             docker push "$DOCKER_USERNAME/my-nginx-hello-world"
-  # deploy-docker:
-  #   docker:
+
+  deploy-docker:
+    docker:
+      - image: weaveworks/eksctl
+    steps:
+      - attach_workspace:
+          at: ~/project/
+      - run:
+          name: Deploy Docker image to EKS
+          command: |
+            kubectl apply -f manifest.yaml
+            kubectl set image deployment/my-nginx-hello-world nginx="$DOCKER_USERNAME/my-nginx-hello-world"
+            kubectl rollout status deployment/my-nginx-hello-world
 
 # Orchestrate our job run sequence
 workflows:
@@ -74,3 +85,4 @@ workflows:
       - deploy-cluster
       - build-test
       - build-docker
+      - deploy-docker
