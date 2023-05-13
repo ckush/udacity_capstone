@@ -74,6 +74,7 @@ jobs:
       - run:
           name: Deploy Docker image to EKS
           command: |
+            ls
             kubectl apply -f manifest.yaml
             kubectl set image deployment/my-nginx-hello-world nginx="$DOCKER_USERNAME/my-nginx-hello-world"
             kubectl rollout status deployment/my-nginx-hello-world
