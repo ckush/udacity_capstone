@@ -76,14 +76,10 @@ jobs:
           command: |
             export KUBECONFIG=~/project/manifest.yaml
             if kubectl get deployment my-nginx-hello-world >/dev/null 2>&1; then
-              echo "1"
               kubectl set image deployment/my-nginx-hello-world my-nginx-hello-world="$DOCKER_USERNAME/my-nginx-hello-world"
-              echo "2"
               kubectl rollout status deployment/my-nginx-hello-world
             else
-              echo "11"
               kubectl create deployment my-nginx-hello-world --image=ckush/my-nginx-hello-world
-              echo "22"
               kubectl expose deployment my-nginx-hello-world --type=LoadBalancer --port=80 --target-port=80
             fi
 
