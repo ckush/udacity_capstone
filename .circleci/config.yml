@@ -76,6 +76,9 @@ jobs:
           command: |
             ls
             ls ~/project/
+            pwd
+            cat manifest.yaml
+            cat ~/project/manifest.yaml
             export KUBECONFIG=~/project/manifest.yaml
             if kubectl get deployment my-nginx-hello-world >/dev/null 2>&1; then
               kubectl set image deployment/my-nginx-hello-world nginx="$DOCKER_USERNAME/my-nginx-hello-world"
@@ -96,4 +99,4 @@ workflows:
       - build-docker:
           requires: [build-test]
       - deploy-docker:
-          requires: [deploy-cluster]
+          requires: [deploy-cluster, build-docker]
