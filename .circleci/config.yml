@@ -77,7 +77,7 @@ jobs:
             export KUBECONFIG=~/project/manifest.yaml
             if kubectl get deployment my-nginx-hello-world >/dev/null 2>&1; then
               echo "1"
-              kubectl set image deployment/my-nginx-hello-world nginx="$DOCKER_USERNAME/my-nginx-hello-world"
+              kubectl set image deployment/my-nginx-hello-world my-nginx-hello-world="$DOCKER_USERNAME/my-nginx-hello-world"
               echo "2"
               kubectl rollout status deployment/my-nginx-hello-world
             else
