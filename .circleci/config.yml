@@ -77,9 +77,15 @@ jobs:
             ls
             ls ~/project/
             export KUBECONFIG=~/project/manifest.yaml
-            kubectl apply -f ~/project/manifest.yaml
-            kubectl set image deployment/my-nginx-hello-world nginx="$DOCKER_USERNAME/my-nginx-hello-world"
-            kubectl rollout status deployment/my-nginx-hello-world
+            if kubectl get deployment my-nginx-hello-world >/dev/null 2>&1; then
+              kubectl set image deployment/my-nginx-hello-world nginx="$DOCKER_USERNAME/my-nginx-hello-world"
+              kubectl rollout status deployment/my-nginx-hello-world
+            else
+              kubectl create deployment my-nginx-hello-world --image=ckush/my-nginx-hello-world
+              kubectl expose deployment my-nginx-hello-world --type=LoadBalancer --port=80 --target-port=80
+            fi
+
+
 
 # Orchestrate our job run sequence
 workflows:
